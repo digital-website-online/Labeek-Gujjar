@@ -1,87 +1,20 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>My Gallery</title>
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            min-height: 100vh;
-            background: #f4f1ec;
-            font-family: Arial, sans-serif;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            padding: 25px;
-        }
-
-        .gallery {
-            width: 100%;
-            max-width: 1100px;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 25px;
-        }
-
-        .photo {
-            width: 50%;
-            max-height: 85vh;
-
-            object-fit: cover;
-
-            border-radius: 15px;
-
-            box-shadow: 0 10px 30px rgba(0,0,0,0.18);
-
-            transition: 0.3s ease;
-        }
-
-        .photo:hover {
-            transform: scale(1.02);
-        }
-
-        /* Mobile */
-        @media (max-width: 700px) {
-
-            body {
-                padding: 15px;
-            }
-
-            .gallery {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .photo {
-                width: 100%;
-                max-height: none;
-            }
-        }
-    </style>
+    <title>My Website</title>
 </head>
-
 <body>
 
-    <div class="gallery">
+    <h1>Meri Website</h1>
+    <p>Yeh rahi meri do pictures:</p>
 
-        <img src="photo1.jpg" class="photo" alt="Photo 1">
+    <!-- Pehli Picture -->
+    <img src="image1.jpg" alt="Pehli Tasveer" width="300">
 
-        <img src="photo2.jpg" class="photo" alt="Photo 2">
-
-    </div>
+    <!-- Dusri Picture -->
+    <img src="image2.png" alt="Dusri Tasveer" width="300">
 
 </body>
 </html>
