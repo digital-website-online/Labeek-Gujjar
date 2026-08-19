@@ -3,18 +3,568 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Website</title>
+    <title>Aviator Game Mobile Layout</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #0c0f16;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .mobile-container {
+            width: 100%;
+            max-width: 420px;
+            background: #131722;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        }
+        /* Top Navigation Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: #181d2c;
+            border-bottom: 1px solid #232a3e;
+        }
+        .header-logo {
+            color: #ff334b;
+            font-weight: bold;
+            font-size: 20px;
+            font-style: italic;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+        .balance-box {
+            color: #00e676;
+            font-weight: bold;
+        }
+
+        /* History Bar */
+        .history-bar {
+            display: flex;
+            gap: 6px;
+            padding: 8px 12px;
+            overflow-x: auto;
+            background: #0f131d;
+            white-space: nowrap;
+        }
+        .history-item {
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: #1c2333;
+            color: #7289da;
+            font-weight: 600;
+        }
+        .history-item.high { color: #00e676; }
+
+        /* Game Screen / Canvas */
+        .game-screen {
+            position: relative;
+            background: radial-gradient(circle at center, #1e2538 0%, #0b0e14 100%);
+            height: 220px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 2px solid #232a3e;
+        }
+        canvas {
+            display: block;
+        }
+        .center-multiplier {
+            position: absolute;
+            font-size: 42px;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(0,0,0,0.8);
+        }
+        .online-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 12px;
+            background: rgba(0,0,0,0.4);
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            color: #aaa;
+        }
+
+        /* Bet Panels Container */
+        .panels-container {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        /* Single Bet Panel */
+        .bet-panel {
+            background: #181d2c;
+            border-radius: 12px;
+            padding: 12px;
+            border: 1px solid #232a3e;
+        }
+        .tab-switcher {
+            display: flex;
+            background: #0f131d;
+            border-radius: 8px;
+            padding: 2px;
+            margin-bottom: 10px;
+        }
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 6px;
+            font-size: 12px;
+            color: #888;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .tab.active {
+            background: #232a3e;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .bet-controls-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        .stepper {
+            display: flex;
+            align-items: center;
+            background: #0f131d;
+            border-radius: 8px;
+            border: 1px solid #2b324a;
+            overflow: hidden;
+        }
+        .stepper button {
+            background: transparent;
+            border: none;
+            color: #aaa;
+            padding: 8px 12px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .stepper input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #fff;
+            text-align: center;
+            font-size: 15px;
+            font-weight: bold;
+            outline: none;
+        }
+        .presets {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+            margin-top: 6px;
+        }
+        .preset-btn {
+            background: #0f131d;
+            border: 1px solid #232a3e;
+            color: #aaa;
+            font-size: 11px;
+            padding: 4px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .preset-btn:hover {
+            background: #232a3e;
+            color: #fff;
+        }
+
+        .action-btn {
+            flex: 1.2;
+            padding: 14px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.1s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+        }
+        .btn-bet {
+            background: #00c853;
+            color: #ffffff;
+        }
+        .btn-bet:active {
+            background: #00b044;
+        }
+        .btn-cashout {
+            background: #ffab00;
+            color: #000000;
+            display: none;
+        }
+        .btn-subtext {
+            font-size: 11px;
+            font-weight: normal;
+            opacity: 0.9;
+        }
+
+        /* Bottom Status / Stats Bar */
+        .bottom-stats {
+            background: #181d2c;
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #888;
+            border-top: 1px solid #232a3e;
+        }
+        .total-win {
+            color: #00e676;
+            font-weight: bold;
+        }
+
+        /* Footer Nav */
+        .footer-nav {
+            display: flex;
+            background: #0f131d;
+            border-top: 1px solid #232a3e;
+            padding: 8px 0;
+        }
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            font-size: 11px;
+            color: #777;
+            cursor: pointer;
+        }
+        .nav-item.active {
+            color: #ff334b;
+        }
+    </style>
 </head>
 <body>
 
-    <h1>Meri Website</h1>
-    <p>Yeh rahi meri do pictures:</p>
+<div class="mobile-container">
+    <!-- Top Header -->
+    <div class="header">
+        <div class="header-logo">Aviator</div>
+        <div class="header-right">
+            <div class="balance-box"><span id="mainBalance">100.00</span> USD</div>
+        </div>
+    </div>
 
-    <!-- Pehli Picture -->
-    <img src="file_00000000709c7230a703c69ce6b0149d.png" alt="Pehli Tasveer" width="300">
+    <!-- History Bar -->
+    <div class="history-bar" id="historyBar">
+        <div class="history-item">1.15x</div>
+        <div class="history-item high">348.67x</div>
+        <div class="history-item">1.17x</div>
+        <div class="history-item">1.87x</div>
+        <div class="history-item high">8.05x</div>
+        <div class="history-item">1.94x</div>
+    </div>
 
-    <!-- Dusri Picture -->
-    <img src="image2.png" alt="Dusri Tasveer" width="300">
+    <!-- Game Screen / Canvas Area -->
+    <div class="game-screen">
+        <canvas id="gameCanvas" width="380" height="200"></canvas>
+        <div class="center-multiplier" id="multiplierDisplay">1.00x</div>
+        <div class="online-badge">👥 1,049</div>
+    </div>
 
+    <!-- Betting Panels Container (Two Panels like Screenshot) -->
+    <div class="panels-container">
+        
+        <!-- Panel 1 -->
+        <div class="bet-panel" id="panel1">
+            <div class="tab-switcher">
+                <div class="tab active">Bet</div>
+                <div class="tab">Auto</div>
+            </div>
+            <div class="bet-controls-row">
+                <div class="input-group">
+                    <div class="stepper">
+                        <button onclick="changeBet(1, -0.5)">-</button>
+                        <input type="number" id="betInput1" value="1.30" step="0.1">
+                        <button onclick="changeBet(1, 0.5)">+</button>
+                    </div>
+                    <div class="presets">
+                        <div class="preset-btn" onclick="setPreset(1, 1)">1</div>
+                        <div class="preset-btn" onclick="setPreset(1, 2)">2</div>
+                        <div class="preset-btn" onclick="setPreset(1, 5)">5</div>
+                        <div class="preset-btn" onclick="setPreset(1, 10)">10</div>
+                    </div>
+                </div>
+                <button class="action-btn btn-bet" id="actionBtn1" onclick="toggleGame(1)">
+                    <span id="btnText1">Bet</span>
+                    <span class="btn-subtext" id="btnSub1">1.30 USD</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Panel 2 -->
+        <div class="bet-panel" id="panel2">
+            <div class="tab-switcher">
+                <div class="tab active">Bet</div>
+                <div class="tab">Auto</div>
+            </div>
+            <div class="bet-controls-row">
+                <div class="input-group">
+                    <div class="stepper">
+                        <button onclick="changeBet(2, -0.5)">-</button>
+                        <input type="number" id="betInput2" value="1.00" step="0.1">
+                        <button onclick="changeBet(2, 0.5)">+</button>
+                    </div>
+                    <div class="presets">
+                        <div class="preset-btn" onclick="setPreset(2, 1)">1</div>
+                        <div class="preset-btn" onclick="setPreset(2, 2)">2</div>
+                        <div class="preset-btn" onclick="setPreset(2, 5)">5</div>
+                        <div class="preset-btn" onclick="setPreset(2, 10)">10</div>
+                    </div>
+                </div>
+                <button class="action-btn btn-bet" id="actionBtn2" onclick="toggleGame(2)">
+                    <span id="btnText2">Bet</span>
+                    <span class="btn-subtext" id="btnSub2">1.00 USD</span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bottom Stats Bar -->
+    <div class="bottom-stats">
+        <span>1786/1864 Bets</span>
+        <span>Total win USD: <span class="total-win" id="totalWinDisplay">0.00</span></span>
+    </div>
+
+    <!-- Footer Nav -->
+    <div class="footer-nav">
+        <div class="nav-item active">🎲 Casino</div>
+        <div class="nav-item">💳 Deposit</div>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const multiplierDisplay = document.getElementById('multiplierDisplay');
+    const mainBalanceDisplay = document.getElementById('mainBalance');
+    const totalWinDisplay = document.getElementById('totalWinDisplay');
+
+    let balance = 100.00;
+    let totalWinSession = 0.00;
+    let multiplier = 1.00;
+    let gameInterval = null;
+    let isGameRunning = false;
+    let crashPoint = 1.00;
+
+    // Panel tracking states
+    let panelState = {
+        1: { active: false, bet: 1.30, cashedOut: false },
+        2: { active: false, bet: 1.00, cashedOut: false }
+    };
+
+    let curveProgress = 0;
+
+    function drawScene(progress, currentMultiplier, crashed) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Background grid rays / lines simulation
+        ctx.strokeStyle = '#1e2538';
+        ctx.lineWidth = 1;
+        for(let i = 0; i < canvas.width; i += 40) {
+            ctx.beginPath();
+            ctx.moveTo(i, 0);
+            ctx.lineTo(i, canvas.height);
+            ctx.stroke();
+        }
+
+        // Flight curve
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height);
+        let endX = Math.min(progress * 2, canvas.width - 40);
+        let endY = Math.max(canvas.height - (progress * 1.2), 30);
+        ctx.quadraticCurveTo(endX / 2, canvas.height - 10, endX, endY);
+        ctx.strokeStyle = crashed ? '#ff334b' : '#00e676';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        // Plane icon simulation (Red triangle/dot like aviator)
+        if (!crashed) {
+            ctx.fillStyle = '#ff334b';
+            ctx.beginPath();
+            ctx.arc(endX, endY, 6, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+
+    function changeBet(panelNum, amount) {
+        let input = document.getElementById(`betInput${panelNum}`);
+        let val = parseFloat(input.value) + amount;
+        if (val < 0.1) val = 0.1;
+        input.value = val.toFixed(2);
+        document.getElementById(`btnSub${panelNum}`).innerText = input.value + " USD";
+        panelState[panelNum].bet = val;
+    }
+
+    function setPreset(panelNum, val) {
+        let input = document.getElementById(`betInput${panelNum}`);
+        input.value = val.toFixed(2);
+        document.getElementById(`btnSub${panelNum}`).innerText = input.value + " USD";
+        panelState[panelNum].bet = val;
+    }
+
+    // Main Game Engine Triggered by Bet Buttons
+    function toggleGame(panelNum) {
+        let betVal = parseFloat(document.getElementById(`betInput${panelNum}`).value);
+
+        if (!isGameRunning) {
+            // Start a new game round if not already running
+            if (betVal > balance) {
+                alert("Insufficient balance!");
+                return;
+            }
+            balance -= betVal;
+            mainBalanceDisplay.innerText = balance.toFixed(2);
+            
+            panelState[panelNum].bet = betVal;
+            panelState[panelNum].active = true;
+            panelState[panelNum].cashedOut = false;
+
+            startRoundEngine();
+            transformButtonToCashout(panelNum);
+        } else {
+            // If game is running, clicking panel button acts as Cash Out or placing a secondary bet
+            if (panelState[panelNum].active && !panelState[panelNum].cashedOut) {
+                // Cashout action
+                panelState[panelNum].cashedOut = true;
+                let winAmount = panelState[panelNum].bet * multiplier;
+                balance += winAmount;
+                totalWinSession += winAmount;
+                mainBalanceDisplay.innerText = balance.toFixed(2);
+                totalWinDisplay.innerText = totalWinSession.toFixed(2);
+
+                let btn = document.getElementById(`actionBtn${panelNum}`);
+                btn.style.background = '#232a3e';
+                document.getElementById(`btnText${panelNum}`).innerText = "CASH OUT";
+                document.getElementById(`btnSub${panelNum}`).innerText = `${winAmount.toFixed(2)} USD`;
+            } else if (!panelState[panelNum].active) {
+                // Join running round late
+                if (betVal > balance) return;
+                balance -= betVal;
+                mainBalanceDisplay.innerText = balance.toFixed(2);
+                panelState[panelNum].bet = betVal;
+                panelState[panelNum].active = true;
+                panelState[panelNum].cashedOut = false;
+                transformButtonToCashout(panelNum);
+            }
+        }
+    }
+
+    function transformButtonToCashout(panelNum) {
+        let btn = document.getElementById(`actionBtn${panelNum}`);
+        btn.className = "action-btn btn-cashout";
+        document.getElementById(`btnText${panelNum}`).innerText = "CASHOUT";
+        document.getElementById(`btnSub${panelNum}`).innerText = (panelState[panelNum].bet * multiplier).toFixed(2) + " USD";
+    }
+
+    function resetPanelButton(panelNum) {
+        let btn = document.getElementById(`actionBtn${panelNum}`);
+        btn.className = "action-btn btn-bet";
+        document.getElementById(`btnText${panelNum}`).innerText = "Bet";
+        document.getElementById(`btnSub${panelNum}`).innerText = panelState[panelNum].bet.toFixed(2) + " USD";
+        panelState[panelNum].active = false;
+        panelState[panelNum].cashedOut = false;
+    }
+
+    function startRoundEngine() {
+        if (isGameRunning) return;
+        isGameRunning = true;
+        multiplier = 1.00;
+        curveProgress = 0;
+        crashPoint = (Math.random() * (4.00 - 1.10) + 1.10).toFixed(2);
+
+        gameInterval = setInterval(() => {
+            multiplier += 0.02;
+            curveProgress += 3;
+            multiplierDisplay.innerText = multiplier.toFixed(2) + 'x';
+            multiplierDisplay.style.color = "#ffffff";
+
+            // Update live cashout button values if active
+            for (let p = 1; p <= 2; p++) {
+                if (panelState[p].active && !panelState[p].cashedOut) {
+                    document.getElementById(`btnSub${p}`).innerText = (panelState[p].bet * multiplier).toFixed(2) + " USD";
+                }
+            }
+
+            drawScene(curveProgress, multiplier, false);
+
+            if (multiplier >= crashPoint) {
+                endRound(true);
+            }
+        }, 50);
+    }
+
+    function endRound(crashed) {
+        clearInterval(gameInterval);
+        isGameRunning = false;
+
+        if (crashed) {
+            multiplierDisplay.innerText = crashPoint + 'x';
+            multiplierDisplay.style.color = '#ff334b';
+            drawScene(curveProgress, crashPoint, true);
+
+            // Handle un-cashed bets (losses)
+            for (let p = 1; p <= 2; p++) {
+                if (panelState[p].active && !panelState[p].cashedOut) {
+                    let btn = document.getElementById(`actionBtn${p}`);
+                    btn.style.background = '#ff334b';
+                    document.getElementById(`btnText${p}`).innerText = "LOST";
+                    document.getElementById(`btnSub${p}`).innerText = "0.00 USD";
+                }
+            }
+        }
+
+        // Reset panels automatically after 2 seconds for the next round
+        setTimeout(() => {
+            resetPanelButton(1);
+            resetPanelButton(2);
+            document.getElementById('actionBtn1').style.background = '#00c853';
+            document.getElementById('actionBtn2').style.background = '#00c853';
+            multiplierDisplay.innerText = "1.00x";
+            multiplierDisplay.style.color = "#fff";
+            drawScene(0, 1.00, false);
+        }, 2500);
+    }
+
+    // Initial render
+    drawScene(0, 1.00, false);
+</script>
 </body>
 </html>
